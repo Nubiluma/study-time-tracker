@@ -1,9 +1,9 @@
 class Timer {
-  constructor(seconds, minutes, hours, date) {
+  constructor(seconds, minutes, hours, isStopped) {
     this.seconds = seconds;
     this.minutes = minutes;
     this.hours = hours;
-    this.date = date;
+    this.isStopped = isStopped;
   }
 }
 
@@ -14,94 +14,41 @@ const startBtn = document.getElementById("btnStartTimer");
 const pauseBtn = document.getElementById("btnPauseTimer");
 const resetBtn = document.getElementById("btnResetTimer");
 
-let currentInterval;
-
 const state = {
-  activeTimer: null,
-  savedTimers: [],
+  timer: [],
 };
 
-/*********************************************************************/
-
 startBtn.addEventListener("click", startTimer);
-pauseBtn.addEventListener("click", pauseTimer);
-
-getDataFromLocalStorage();
-renderTimer();
-
-/*********************************************************************/
 
 function startTimer() {
-  if (state.activeTimer == null) {
-    state.activeTimer = new Timer(0, 0, 0, Date());
-  }
-  currentInterval = setInterval(() => {
-    state.activeTimer.seconds++;
-    if (state.activeTimer.seconds === 60) {
-      state.activeTimer.seconds = 0;
-      state.activeTimer.minutes++;
-      if (state.activeTimer.minutes === 60) {
-        state.activeTimer.minutes = 0;
-        state.activeTimer.hours++;
+  const timer = new Timer(0, 0, 0, true);
+  setInterval(() => {
+    timer.seconds++;
+    if (timer.seconds === 60) {
+      timer.seconds = 0;
+      timer.minutes++;
+      if (timer.minutes === 60) {
+        timer.minutes = 0;
+        timer.hours++;
       }
     }
 
-    updateLocalStorage();
-    renderTimer();
+    if (timer.seconds < 10) {
+      timerSeconds.innerText = "0" + timer.seconds;
+    } else {
+      timerSeconds.innerText = timer.seconds;
+    }
+    if (timer.minutes < 10) {
+      timerMinutes.innerText = "0" + timer.minutes;
+    } else {
+      timerMinutes.innerText = timer.minutes;
+    }
+    if (timer.hours < 10) {
+      timerHours.innerText = "0" + timer.hours;
+    } else {
+      timerHours.innerText = timer.hours;
+    }
   }, 1000);
 }
 
-function pauseTimer() {
-  clearInterval(currentInterval);
-
-  if (
-    state.savedTimers.length === 0 ||
-    state.savedTimers[0].date !== state.activeTimer.date
-  ) {
-    state.savedTimers.unshift(state.activeTimer);
-  } else {
-    state.savedTimers[0] = state.activeTimer;
-  }
-  console.log(state.savedTimers);
-  updateLocalStorage();
-}
-
-/*********************************************************************/
-
-function renderTimer() {
-  if (state.activeTimer != null) {
-    if (state.activeTimer.seconds < 10) {
-      timerSeconds.innerText = "0" + state.activeTimer.seconds;
-    } else {
-      timerSeconds.innerText = state.activeTimer.seconds;
-    }
-    if (state.activeTimer.minutes < 10) {
-      timerMinutes.innerText = "0" + state.activeTimer.minutes;
-    } else {
-      timerMinutes.innerText = state.activeTimer.minutes;
-    }
-    if (state.activeTimer.hours < 10) {
-      timerHours.innerText = "0" + state.activeTimer.hours;
-    } else {
-      timerHours.innerText = state.activeTimer.hours;
-    }
-  }
-}
-
-/*********************************************************************/
-
-function getDataFromLocalStorage() {
-  const activeTimerFromLocalStorage = localStorage.getItem("activeTimer");
-  const savedTimersFromLocalStorage = localStorage.getItem("savedTimers");
-  if (activeTimerFromLocalStorage) {
-    state.activeTimer = JSON.parse(activeTimerFromLocalStorage);
-  }
-  if (savedTimersFromLocalStorage) {
-    state.savedTimers = JSON.parse(savedTimersFromLocalStorage);
-  }
-}
-
-function updateLocalStorage() {
-  localStorage.setItem("activeTimer", JSON.stringify(state.activeTimer));
-  localStorage.setItem("savedTimers", JSON.stringify(state.savedTimers));
-}
+function pauseTimer() {}
