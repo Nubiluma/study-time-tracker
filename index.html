@@ -5,23 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>Studying Time Tracker</title>
   </head>
   <body>
     <main>
-      <div>
-        <div></div>
+      <section>
         <div>
-          <span id="timerHours">00</span>
-          <span>:</span>
-          <span id="timerMinutes">00</span>
-          <span>:</span>
-          <span id="timerSeconds">00</span>
+          <div>
+            <span id="timerHours">00</span>
+            <span>:</span>
+            <span id="timerMinutes">00</span>
+            <span>:</span>
+            <span id="timerSeconds">00</span>
+          </div>
         </div>
-      </div>
-      <button id="btnStartTimer">Start</button>
-      <button id="btnPauseTimer" disabled>Pause</button>
-      <button id="btnResetTimer" disabled>Reset</button>
+        <button id="btnStartTimer">Start</button>
+        <button id="btnPauseTimer">Pause</button>
+        <button id="btnResetTimer" disabled>Reset</button>
+      </section>
+      <section id="timersOfPastDays"></section>
     </main>
     <script src="script.js"></script>
   </body>
