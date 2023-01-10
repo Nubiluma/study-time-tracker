@@ -139,14 +139,24 @@ function demandUserFeedback() {
 function saveAction() {
   saveTimer();
   state.activeTimer = null;
+  updateLocalStorage();
   renderTimer();
   const notification = document.querySelector("#notification");
   notification.remove();
 }
 
-function dismissAction() {}
+function dismissAction() {
+  state.activeTimer = null;
+  updateLocalStorage();
+  renderTimer();
+  const notification = document.querySelector("#notification");
+  notification.remove();
+}
 
-function cancelAction() {}
+function cancelAction() {
+  const notification = document.querySelector("#notification");
+  notification.remove();
+}
 
 /*********************************************************************/
 
