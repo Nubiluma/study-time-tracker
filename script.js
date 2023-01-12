@@ -33,9 +33,17 @@ renderTimer();
 
 /*********************************************************************/
 
+/**
+ * start interval of every second and update active timer
+ * create new active timer object if none is existing
+ * @returns if active timer's date does not match today's date to prevent timer from progressing
+ */
 function startTimer() {
   if (state.activeTimer == null) {
     state.activeTimer = new Timer(0, 0, 0, formatDate(new Date()));
+  } else if (!isActiveTimerDateToday()) {
+    createNotificationForUserFeedback();
+    return;
   }
   currentInterval = setInterval(() => {
     state.activeTimer.seconds++;
@@ -53,11 +61,17 @@ function startTimer() {
   }, 1000);
 }
 
+/**
+ * clear currently running interval to prevent timer from updating/progressing (pause)
+ */
 function pauseTimer() {
   clearInterval(currentInterval);
   updateLocalStorage();
 }
 
+/**
+ * pause timer and demand user feedback of what to do with timer's progress (save, dismiss or cancel action)
+ */
 function resetTimer() {
   if (state.activeTimer != null) {
     pauseTimer();
@@ -73,11 +87,11 @@ function saveTimer() {
   if (state.savedTimers.length === 0 || state.savedTimers[0] === null) {
     state.savedTimers.unshift(state.activeTimer);
     updateLocalStorage();
-  } else if (state.savedTimers[0].date !== state.activeTimer.date) {
+  } else if (!isActiveTimerDateToday()) {
     createNotificationForUserFeedback();
     state.savedTimers.unshift(state.activeTimer);
     updateLocalStorage();
-  } else if (state.savedTimers[0].date === state.activeTimer.date) {
+  } else if (isActiveTimerDateToday()) {
     state.savedTimers[0] = accountTimers(
       state.activeTimer,
       state.savedTimers[0]
@@ -116,6 +130,16 @@ function accountTimers(activeTimer, savedTimer) {
     console.error(
       "timer(s) invalid: seconds, minutes or hours exceed limit of 60 and/or 24!"
     );
+  }
+}
+
+/**
+ * check if active timer's date matches today's date (both as formated string)
+ * @returns true if date matches today's date
+ */
+function isActiveTimerDateToday() {
+  if (state.activeTimer != null) {
+    return state.activeTimer.date === formatDate(new Date());
   }
 }
 
@@ -199,6 +223,10 @@ function cancelAction() {
 
 /*********************************************************************/
 
+/**
+ * render active timer in dom as span elements
+ * if a number consists of only one digit, format number by inserting "0" before it
+ */
 function renderTimer() {
   if (state.activeTimer != null) {
     if (state.activeTimer.seconds < 10) {
@@ -241,6 +269,11 @@ function updateLocalStorage() {
   localStorage.setItem("savedTimers", JSON.stringify(state.savedTimers));
 }
 
+/**
+ * format and convert date from Date() API object: months(0-11)/days(1-31)/year(all 4 digits)
+ * @param {*} date Date() API object
+ * @returns formated string of date
+ */
 function formatDate(date) {
   return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
 }
