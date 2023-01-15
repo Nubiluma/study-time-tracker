@@ -33,6 +33,7 @@ renderTimer();
 renderPastTimers();
 
 /*********************************************************************/
+/**EVENTS*/
 
 /**
  * start interval of every second and update active timer
@@ -102,84 +103,6 @@ function saveTimer() {
 }
 
 /**
- * account seconds, minutes and hours of two timer objects
- * @param {*} activeTimer active timer
- * @param {*} savedTimer saved timer from array
- * @returns accounted sum of activeTimer and savedTimer as savedTimer
- */
-function accountTimers(activeTimer, savedTimer) {
-  let sumSeconds = savedTimer.seconds + activeTimer.seconds;
-  let sumMinutes = savedTimer.minutes + activeTimer.minutes;
-  let sumHours = savedTimer.hours + activeTimer.hours;
-
-  if (sumSeconds < 120 && sumMinutes < 120 && sumHours < 24) {
-    if (sumSeconds >= 60) {
-      sumSeconds -= 60;
-      sumMinutes++;
-    }
-    if (sumMinutes >= 60) {
-      sumMinutes -= 60;
-      sumHours++;
-    }
-    savedTimer.seconds = sumSeconds;
-    savedTimer.minutes = sumMinutes;
-    savedTimer.hours = sumHours;
-
-    console.log(savedTimer);
-    return savedTimer;
-  } else {
-    console.error(
-      "timer(s) invalid: seconds, minutes or hours exceed limit of 60 and/or 24!"
-    );
-  }
-}
-
-/**
- * check if active timer's date matches today's date (both as formated string)
- * @returns true if date matches today's date
- */
-function isActiveTimerDateToday() {
-  if (state.activeTimer != null) {
-    return state.activeTimer.date === formatDate(new Date());
-  }
-}
-
-/**
- * create markup for user to decide what to do with active timer
- * let user choose to save, dismiss or cancel decision
- */
-function createNotificationForUserFeedback() {
-  startBtn.disabled = true;
-  pauseBtn.disabled = true;
-  resetBtn.disabled = true;
-  const notification = document.createElement("aside");
-  notification.id = "notification";
-  const msg = document.createTextNode(
-    "Do you want to save the timer's progress?"
-  );
-  notification.appendChild(msg);
-  const saveBtn = document.createElement("button");
-  const confirmBtnTxt = document.createTextNode("Save");
-  saveBtn.appendChild(confirmBtnTxt);
-  const dismissBtn = document.createElement("button");
-  const dismissBtnTxt = document.createTextNode("Dismiss");
-  dismissBtn.appendChild(dismissBtnTxt);
-  const cancelBtn = document.createElement("button");
-  const cancelBtnTxt = document.createTextNode("Cancel");
-  cancelBtn.appendChild(cancelBtnTxt);
-
-  saveBtn.addEventListener("click", saveAction);
-  dismissBtn.addEventListener("click", dismissAction);
-  cancelBtn.addEventListener("click", cancelAction);
-
-  notification.appendChild(saveBtn);
-  notification.appendChild(dismissBtn);
-  notification.appendChild(cancelBtn);
-
-  main.appendChild(notification);
-}
-
-/**
  * save-button clicked
  * save changes of active timer to storage and reset active timer
  */
@@ -223,10 +146,10 @@ function cancelAction() {
 }
 
 /*********************************************************************/
+/**MARKUP RENDERING*/
 
 /**
  * render active timer in dom as span elements
- * if a number consists of only one digit, format number by inserting "0" before it
  */
 function renderTimer() {
   if (state.activeTimer != null) {
@@ -234,22 +157,6 @@ function renderTimer() {
   } else {
     timerMarkupElement.innerText = "00:00:00";
   }
-}
-
-function formatTimer(timer) {
-  if (timer != null) {
-    if (timer.seconds < 10) {
-      timer.seconds = "0" + timer.seconds;
-    }
-    if (timer.minutes < 10) {
-      timer.minutes = "0" + timer.minutes;
-    }
-    if (timer.hours < 10) {
-      timer.hours = "0" + timer.hours;
-    }
-  }
-
-  return timer.hours + ":" + timer.minutes + ":" + timer.seconds;
 }
 
 function renderPastTimers() {
@@ -274,7 +181,143 @@ function createMarkupForPastTimerList(timerObject) {
   pastTimerList.appendChild(timerListItem);
 }
 
+/**
+ * create markup for user to decide what to do with active timer
+ * let user choose to save, dismiss or cancel decision
+ */
+function createNotificationForUserFeedback() {
+  startBtn.disabled = true;
+  pauseBtn.disabled = true;
+  resetBtn.disabled = true;
+  const notification = document.createElement("aside");
+  notification.id = "notification";
+  const msg = document.createTextNode(
+    "Do you want to save the timer's progress?"
+  );
+  notification.appendChild(msg);
+  const saveBtn = document.createElement("button");
+  const confirmBtnTxt = document.createTextNode("Save");
+  saveBtn.appendChild(confirmBtnTxt);
+  const dismissBtn = document.createElement("button");
+  const dismissBtnTxt = document.createTextNode("Dismiss");
+  dismissBtn.appendChild(dismissBtnTxt);
+  const cancelBtn = document.createElement("button");
+  const cancelBtnTxt = document.createTextNode("Cancel");
+  cancelBtn.appendChild(cancelBtnTxt);
+
+  saveBtn.addEventListener("click", saveAction);
+  dismissBtn.addEventListener("click", dismissAction);
+  cancelBtn.addEventListener("click", cancelAction);
+
+  notification.appendChild(saveBtn);
+  notification.appendChild(dismissBtn);
+  notification.appendChild(cancelBtn);
+
+  main.appendChild(notification);
+}
+
 /*********************************************************************/
+/**UTILITY*/
+
+/**
+ * check if active timer's date matches today's date (both as formated string)
+ * @returns true if date matches today's date
+ */
+function isActiveTimerDateToday() {
+  if (state.activeTimer != null) {
+    return state.activeTimer.date === formatDate(new Date());
+  }
+}
+
+/**
+ * account seconds, minutes and hours of two timer objects
+ * @param {*} activeTimer active timer
+ * @param {*} savedTimer saved timer from array
+ * @returns accounted sum of activeTimer and savedTimer as savedTimer
+ */
+function accountTimers(activeTimer, savedTimer) {
+  let sumSeconds = savedTimer.seconds + activeTimer.seconds;
+  let sumMinutes = savedTimer.minutes + activeTimer.minutes;
+  let sumHours = savedTimer.hours + activeTimer.hours;
+
+  if (sumSeconds < 120 && sumMinutes < 120 && sumHours < 24) {
+    if (sumSeconds >= 60) {
+      sumSeconds -= 60;
+      sumMinutes++;
+    }
+    if (sumMinutes >= 60) {
+      sumMinutes -= 60;
+      sumHours++;
+    }
+    savedTimer.seconds = sumSeconds;
+    savedTimer.minutes = sumMinutes;
+    savedTimer.hours = sumHours;
+
+    console.log(savedTimer);
+    return savedTimer;
+  } else {
+    console.error(
+      "timer(s) invalid: seconds, minutes or hours exceed limit of 60 and/or 24!"
+    );
+  }
+}
+
+/**
+ * format timer by inserting "0" before value if it consists of only 1 digit
+ * @param {*} timer
+ * @returns formated timer
+ */
+function formatTimer(timer) {
+  if (timer != null) {
+    if (timer.seconds < 10) {
+      timer.seconds = "0" + timer.seconds;
+    }
+    if (timer.minutes < 10) {
+      timer.minutes = "0" + timer.minutes;
+    }
+    if (timer.hours < 10) {
+      timer.hours = "0" + timer.hours;
+    }
+  }
+
+  return timer.hours + ":" + timer.minutes + ":" + timer.seconds;
+}
+
+/**
+ * format and convert date from Date() API object: months(0-11)/days(1-31)/year(all 4 digits)
+ * @param {*} date Date() API object
+ * @returns formated string of date
+ */
+function formatDate(date) {
+  const months = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+  ];
+
+  let day = date.getDate();
+
+  if (date.getDate() < 10) {
+    day = "0" + date.getDate();
+  }
+
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return month + "|" + day + "|" + year;
+}
+
+/*********************************************************************/
+/**STORAGE & BACKEND*/
 
 function getDataFromLocalStorage() {
   const activeTimerFromLocalStorage = localStorage.getItem("activeTimer");
@@ -290,21 +333,4 @@ function getDataFromLocalStorage() {
 function updateLocalStorage() {
   localStorage.setItem("activeTimer", JSON.stringify(state.activeTimer));
   localStorage.setItem("savedTimers", JSON.stringify(state.savedTimers));
-}
-
-/**
- * format and convert date from Date() API object: months(0-11)/days(1-31)/year(all 4 digits)
- * @param {*} date Date() API object
- * @returns formated string of date
- */
-function formatDate(date) {
-  if (date.getDate() < 10) {
-    const day = "0" + date.getDate();
-  } else {
-    const day = date.getDate();
-  }
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  return month + "." + day + "." + year;
 }
