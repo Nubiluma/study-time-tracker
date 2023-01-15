@@ -7,13 +7,13 @@ class Timer {
   }
 }
 
-const timerSeconds = document.querySelector("#timerSeconds");
-const timerMinutes = document.querySelector("#timerMinutes");
-const timerHours = document.querySelector("#timerHours");
+const timerMarkupElement = document.querySelector("#timer");
 const startBtn = document.querySelector("#btnStartTimer");
 const pauseBtn = document.querySelector("#btnPauseTimer");
 const resetBtn = document.querySelector("#btnResetTimer");
 const main = document.querySelector("main");
+const pastTimerContainer = document.querySelector("#pastTimerContainer");
+const pastTimerList = document.querySelector("#pastTimerList");
 
 let currentInterval;
 
@@ -30,6 +30,7 @@ resetBtn.addEventListener("click", resetTimer);
 
 getDataFromLocalStorage();
 renderTimer();
+renderPastTimers();
 
 /*********************************************************************/
 
@@ -187,11 +188,11 @@ function saveAction() {
   state.activeTimer = null;
   updateLocalStorage();
   renderTimer();
-  const notification = document.querySelector("#notification");
-  notification.remove();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
+  const notification = document.querySelector("#notification");
+  notification.remove();
 }
 
 /**
@@ -229,26 +230,48 @@ function cancelAction() {
  */
 function renderTimer() {
   if (state.activeTimer != null) {
-    if (state.activeTimer.seconds < 10) {
-      timerSeconds.innerText = "0" + state.activeTimer.seconds;
-    } else {
-      timerSeconds.innerText = state.activeTimer.seconds;
-    }
-    if (state.activeTimer.minutes < 10) {
-      timerMinutes.innerText = "0" + state.activeTimer.minutes;
-    } else {
-      timerMinutes.innerText = state.activeTimer.minutes;
-    }
-    if (state.activeTimer.hours < 10) {
-      timerHours.innerText = "0" + state.activeTimer.hours;
-    } else {
-      timerHours.innerText = state.activeTimer.hours;
-    }
+    timerMarkupElement.innerText = formatTimer(state.activeTimer);
   } else {
-    timerSeconds.innerText = "00";
-    timerMinutes.innerText = "00";
-    timerHours.innerText = "00";
+    timerMarkupElement.innerText = "00:00:00";
   }
+}
+
+function formatTimer(timer) {
+  if (timer != null) {
+    if (timer.seconds < 10) {
+      timer.seconds = "0" + timer.seconds;
+    }
+    if (timer.minutes < 10) {
+      timer.minutes = "0" + timer.minutes;
+    }
+    if (timer.hours < 10) {
+      timer.hours = "0" + timer.hours;
+    }
+  }
+
+  return timer.hours + ":" + timer.minutes + ":" + timer.seconds;
+}
+
+function renderPastTimers() {
+  pastTimerList.innerHTML = "";
+
+  for (const timer of state.savedTimers) {
+    createMarkupForPastTimerList(timer);
+  }
+}
+
+function createMarkupForPastTimerList(timerObject) {
+  const timerListItem = document.createElement("li");
+  const timerDateInfo = document.createElement("div");
+  const timerInfo = document.createElement("div");
+  const timerDateTxt = document.createTextNode(timerObject.date);
+  const timerTxt = document.createTextNode(formatTimer(timerObject));
+
+  timerDateInfo.appendChild(timerDateTxt);
+  timerInfo.appendChild(timerTxt);
+  timerListItem.appendChild(timerDateInfo);
+  timerListItem.appendChild(timerInfo);
+  pastTimerList.appendChild(timerListItem);
 }
 
 /*********************************************************************/
@@ -275,5 +298,13 @@ function updateLocalStorage() {
  * @returns formated string of date
  */
 function formatDate(date) {
-  return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+  if (date.getDate() < 10) {
+    const day = "0" + date.getDate();
+  } else {
+    const day = date.getDate();
+  }
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return month + "." + day + "." + year;
 }

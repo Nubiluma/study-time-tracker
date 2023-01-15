@@ -1,0 +1,192 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  font-size: 10px;
+  font-family: Tahoma, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+/********************************************************************/
+/**/
+
+/********************************************************************/
+/* CLASS LISTS */
+
+/********************************************************************/
+/* UTILITIES */
+
+.pad-p25rem {
+  padding: 0.25rem;
+}
+.pad-p4rem {
+  padding: 0.4rem;
+}
+.pad-p5rem {
+  padding: 0.5rem;
+}
+.pad-p75rem {
+  padding: 0.75rem;
+}
+.pad-1rem {
+  padding: 1rem;
+}
+
+.pad-bottom-p25rem {
+  padding-bottom: 0.25rem;
+}
+.pad-left-0 {
+  padding-left: 0;
+}
+
+.pad-block-p25rem {
+  padding-block: 0.25rem;
+}
+.pad-block-p5rem {
+  padding-block: 0.5rem;
+}
+.pad-block-p75rem {
+  padding-block: 0.75rem;
+}
+.pad-block-1rem {
+  padding-block: 1rem;
+}
+.pad-block-1p25rem {
+  padding-block: 1.25rem;
+}
+
+.pad-left-p25rem {
+  padding-left: 0.25rem;
+}
+.pad-inline-p5rem-4rem {
+  padding-inline: 0.5rem 4rem;
+}
+
+.pad-inline-p25rem {
+  padding-inline: 0.25rem;
+}
+.pad-inline-p5rem {
+  padding-inline: 0.5rem;
+}
+.pad-inline-1rem {
+  padding-inline: 1rem;
+}
+
+.mar-0rem {
+  margin: 0rem;
+}
+.mar-p5rem {
+  margin: 0.5rem;
+}
+.mar-p75rem {
+  margin: 0.75rem;
+}
+.mar-1rem {
+  margin: 1rem;
+}
+
+.mar-block-2rem-3rem {
+  margin-block: 2rem 3rem;
+}
+.mar-inline-2rem {
+  margin-inline: 4rem;
+}
+
+.mar-bottom-p5rem {
+  margin-bottom: 0.5rem;
+}
+.mar-bottom-1rem {
+  margin-bottom: 1rem;
+}
+.mar-bottom-1p5rem {
+  margin-bottom: 1.5rem;
+}
+.mar-bottom-2p5rem {
+  margin-bottom: 2.5rem;
+}
+
+.margin-left-0 {
+  margin-left: 0;
+}
+.mar-left-p25rem {
+  margin-left: 0.25rem;
+}
+
+/*****************/
+
+.ft-sz-1rem {
+  font-size: 1rem;
+}
+.ft-sz-1p2rem {
+  font-size: 1.2rem;
+}
+.ft-sz-1p25rem {
+  font-size: 1.25rem;
+}
+.ft-sz-1p5rem {
+  font-size: 1.5rem;
+}
+.ft-sz-2rem {
+  font-size: 2rem;
+}
+.ft-sz-2p5rem {
+  font-size: 2.5rem;
+}
+.ft-sz-3rem {
+  font-size: 3rem;
+}
+
+.ft-fam-tahoma {
+  font-family: tahoma;
+}
+
+/*****************/
+
+.list-style-none {
+  list-style-type: none;
+}
+
+.opacity {
+  opacity: 0.95;
+}
+
+/*****************/
+
+.flex-c-c-c {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-r-c-c {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-r-spaceBetween-c {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-gap-p75rem {
+  gap: 0.75rem;
+}
+
+.flex-gap-1rem {
+  gap: 1rem;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
