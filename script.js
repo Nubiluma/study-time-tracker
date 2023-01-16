@@ -21,15 +21,15 @@ let currentInterval;
 const state = {
   activeTimer: null,
   savedTimers: [
-    new Timer(10, 22, 3, formatDate(new Date("2023-01-17T03:24:00"))),
-    new Timer(50, 12, 1, formatDate(new Date("2023-01-16T03:24:00"))),
-    new Timer(5, 34, 10, formatDate(new Date("2023-01-15T03:24:00"))),
-    new Timer(52, 59, 0, formatDate(new Date("2023-01-14T03:24:00"))),
-    new Timer(6, 3, 1, formatDate(new Date("2023-01-13T03:24:00"))),
-    new Timer(34, 55, 3, formatDate(new Date("2023-01-12T03:24:00"))),
-    new Timer(7, 0, 5, formatDate(new Date("2023-01-11T03:24:00"))),
-    new Timer(14, 11, 0, formatDate(new Date("2023-01-10T03:24:00"))),
-    new Timer(0, 24, 1, formatDate(new Date("2023-01-09T03:24:00"))),
+    new Timer(10, 22, 03, formatDate(new Date("2023-01-17T03:24:00"))),
+    new Timer(50, 12, 01, formatDate(new Date("2023-01-16T03:24:00"))),
+    new Timer(05, 34, 10, formatDate(new Date("2023-01-15T03:24:00"))),
+    new Timer(52, 59, 00, formatDate(new Date("2023-01-14T03:24:00"))),
+    new Timer(06, 03, 01, formatDate(new Date("2023-01-13T03:24:00"))),
+    new Timer(34, 55, 03, formatDate(new Date("2023-01-12T03:24:00"))),
+    new Timer(07, 00, 05, formatDate(new Date("2023-01-11T03:24:00"))),
+    new Timer(14, 11, 00, formatDate(new Date("2023-01-10T03:24:00"))),
+    new Timer(00, 24, 01, formatDate(new Date("2023-01-09T03:24:00"))),
   ],
 };
 
@@ -40,7 +40,7 @@ pauseBtn.addEventListener("click", pauseTimer);
 resetBtn.addEventListener("click", resetTimer);
 
 getDataFromLocalStorage();
-renderTimer();
+renderActiveTimer();
 renderPastTimers();
 
 /*********************************************************************/
@@ -70,7 +70,7 @@ function startTimer() {
     }
 
     updateLocalStorage();
-    renderTimer();
+    renderActiveTimer();
   }, 1000);
 }
 
@@ -121,7 +121,7 @@ function saveAction() {
   saveTimer();
   state.activeTimer = null;
   updateLocalStorage();
-  renderTimer();
+  renderActiveTimer();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
@@ -136,7 +136,7 @@ function saveAction() {
 function dismissAction() {
   state.activeTimer = null;
   updateLocalStorage();
-  renderTimer();
+  renderActiveTimer();
   const notification = document.querySelector("#notification");
   notification.remove();
   startBtn.disabled = false;
@@ -162,9 +162,14 @@ function cancelAction() {
 /**
  * render active timer in dom as span elements
  */
-function renderTimer() {
+function renderActiveTimer() {
   if (state.activeTimer != null) {
-    timerMarkupElement.innerText = formatTimer(state.activeTimer);
+    timerMarkupElement.innerText =
+      formatSingleDigit(state.activeTimer.hours) +
+      ":" +
+      formatSingleDigit(state.activeTimer.minutes) +
+      ":" +
+      formatSingleDigit(state.activeTimer.seconds);
   } else {
     timerMarkupElement.innerText = "00:00:00";
   }
@@ -186,7 +191,7 @@ function createMarkupForPastTimerList(timerObject) {
   const timerInfo = document.createElement("div");
   timerInfo.classList.add("li-timer-item-info-element");
   const timerDateTxt = document.createTextNode(timerObject.date);
-  const timerTxt = document.createTextNode(formatTimer(timerObject));
+  const timerTxt = document.createTextNode(formatTimerForMarkup(timerObject));
 
   timerDateInfo.appendChild(timerDateTxt);
   timerInfo.appendChild(timerTxt);
@@ -281,20 +286,18 @@ function accountTimers(activeTimer, savedTimer) {
  * @param {*} timer
  * @returns formated timer
  */
-function formatTimer(timer) {
+function formatTimerForMarkup(timer) {
   if (timer != null) {
-    if (timer.seconds < 10) {
-      timer.seconds = "0" + timer.seconds;
-    }
-    if (timer.minutes < 10) {
-      timer.minutes = "0" + timer.minutes;
-    }
-    if (timer.hours < 10) {
-      timer.hours = "0" + timer.hours;
-    }
-  }
+    const formatedTimer =
+      formatSingleDigit(timer.hours) +
+      ":" +
+      formatSingleDigit(timer.minutes) +
+      ":" +
+      formatSingleDigit(timer.seconds);
 
-  return timer.hours + ":" + timer.minutes + ":" + timer.seconds;
+    //console.log(formatedTimer);
+    return formatedTimer;
+  }
 }
 
 /**
@@ -328,6 +331,18 @@ function formatDate(date) {
   const year = date.getFullYear();
 
   return month + "|" + day + "|" + year;
+}
+
+/**
+ * format single digit number to two digit string
+ * @param {*} number
+ * @returns changed or unchanged number
+ */
+function formatSingleDigit(number) {
+  if (number < 10) {
+    return "0" + number;
+  }
+  return number;
 }
 
 /*********************************************************************/
