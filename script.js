@@ -17,9 +17,20 @@ const pastTimerList = document.querySelector("#pastTimerList");
 
 let currentInterval;
 
+// savedTimers contains test objects!
 const state = {
   activeTimer: null,
-  savedTimers: [],
+  savedTimers: [
+    new Timer(10, 22, 3, formatDate(new Date("2023-01-17T03:24:00"))),
+    new Timer(50, 12, 1, formatDate(new Date("2023-01-16T03:24:00"))),
+    new Timer(5, 34, 10, formatDate(new Date("2023-01-15T03:24:00"))),
+    new Timer(52, 59, 0, formatDate(new Date("2023-01-14T03:24:00"))),
+    new Timer(6, 3, 1, formatDate(new Date("2023-01-13T03:24:00"))),
+    new Timer(34, 55, 3, formatDate(new Date("2023-01-12T03:24:00"))),
+    new Timer(7, 0, 5, formatDate(new Date("2023-01-11T03:24:00"))),
+    new Timer(14, 11, 0, formatDate(new Date("2023-01-10T03:24:00"))),
+    new Timer(0, 24, 1, formatDate(new Date("2023-01-09T03:24:00"))),
+  ],
 };
 
 /*********************************************************************/
@@ -169,8 +180,11 @@ function renderPastTimers() {
 
 function createMarkupForPastTimerList(timerObject) {
   const timerListItem = document.createElement("li");
+  timerListItem.classList.add("li-timer-item");
   const timerDateInfo = document.createElement("div");
+  timerDateInfo.classList.add("li-timer-item-date-info-element");
   const timerInfo = document.createElement("div");
+  timerInfo.classList.add("li-timer-item-info-element");
   const timerDateTxt = document.createTextNode(timerObject.date);
   const timerTxt = document.createTextNode(formatTimer(timerObject));
 
