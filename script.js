@@ -209,6 +209,7 @@ function createNotificationForUserFeedback() {
   pauseBtn.disabled = true;
   resetBtn.disabled = true;
   const notification = document.createElement("aside");
+  notification.classList.add("notification");
   notification.id = "notification";
   const msg = document.createTextNode(
     "Do you want to save the timer's progress?"
@@ -336,7 +337,7 @@ function formatDate(date) {
 /**
  * format single digit number to two digit string
  * @param {*} number
- * @returns changed or unchanged number
+ * @returns changed number as string or unchanged number as number
  */
 function formatSingleDigit(number) {
   if (number < 10) {
