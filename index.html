@@ -7,21 +7,21 @@
     <link rel="stylesheet" href="style.css" />
     <title>Studying Time Tracker</title>
   </head>
-  <body>
+  <body class="ft-sz-3rem">
     <main>
-      <section>
-        <div>
+      <section class="flex-r-spaceBetween-c">
+        <div id="pastTimerContainer">
+          <p>Your latest timers...</p>
+          <ul class="pad-left-0 list-style-none" id="pastTimerList"></ul>
+        </div>
+        <div class="mar-inline-2rem flex-grow-1">
+          <span id="timer"></span>
           <div>
-            <span id="timerHours"></span>
-            <span>:</span>
-            <span id="timerMinutes"></span>
-            <span>:</span>
-            <span id="timerSeconds"></span>
+            <button id="btnStartTimer">Start</button>
+            <button id="btnPauseTimer">Pause</button>
+            <button id="btnResetTimer">Reset</button>
           </div>
         </div>
-        <button id="btnStartTimer">Start</button>
-        <button id="btnPauseTimer">Pause</button>
-        <button id="btnResetTimer">Reset</button>
       </section>
       <section id="timersOfPastDays"></section>
     </main>
