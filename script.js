@@ -17,20 +17,9 @@ const pastTimerList = document.querySelector("#pastTimerList");
 
 let currentInterval;
 
-// savedTimers contains test objects!
 const state = {
   activeTimer: null,
-  savedTimers: [
-    new Timer(10, 22, 03, formatDate(new Date("2023-01-17T03:24:00"))),
-    new Timer(50, 12, 01, formatDate(new Date("2023-01-16T03:24:00"))),
-    new Timer(05, 34, 10, formatDate(new Date("2023-01-15T03:24:00"))),
-    new Timer(52, 59, 00, formatDate(new Date("2023-01-14T03:24:00"))),
-    new Timer(06, 03, 01, formatDate(new Date("2023-01-13T03:24:00"))),
-    new Timer(34, 55, 03, formatDate(new Date("2023-01-12T03:24:00"))),
-    new Timer(07, 00, 05, formatDate(new Date("2023-01-11T03:24:00"))),
-    new Timer(14, 11, 00, formatDate(new Date("2023-01-10T03:24:00"))),
-    new Timer(00, 24, 01, formatDate(new Date("2023-01-09T03:24:00"))),
-  ],
+  savedTimers: [],
 };
 
 /*********************************************************************/
