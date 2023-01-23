@@ -10,6 +10,17 @@
   --clr-palette12-white: #ffffff;
   --clr-palette12-light-grey: #d9d9d9;
   --clr-palette12-ash-blue: #284b63;
+
+  --clr-palette15-rich-black-29: #001f29;
+  --clr-palette15-blue-sapphire: #004e66;
+  --clr-palette15-celadon-blue: #0081a7;
+  --clr-palette15-max-blue-green: #00afb9;
+  --clr-palette15-jungle-green: #00b093;
+  --clr-palette15-linen: #f9eadc;
+  --clr-palette15-pale-spring-bud: #e6e6c5;
+  --clr-palette15-light-salmon: #fab390;
+  --clr-palette15-bright-yellow-crayola: #ffa920;
+  --clr-palette15-cedar-chest: #ce5239;
 }
 
 html {
@@ -23,21 +34,27 @@ html {
 
 /*will be replaced by utilities*/
 body {
-  background-color: var(--clr-palette12-light-grey);
+  background-color: var(--clr-palette15-max-blue-green);
   margin: 0;
+}
+
+main {
+  position: relative;
 }
 
 /********************************************************************/
 /* SPECIFIC*/
 
 ::-webkit-scrollbar {
-  background-color: var(--clr-palette12-light-grey);
+  background-color: var(--clr-palette15-linen);
   border-radius: 0 0.5rem 0.5rem 0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--clr-palette12-ash-cyan);
+  background-color: var(--clr-palette15-max-blue-green);
   border-radius: 0 0.45rem 0.45rem 0;
+  box-shadow: inset 0.15rem 0.15rem 0.25rem var(--clr-palette15-linen),
+    inset -0.35rem -0.35rem 0.5rem var(--clr-palette15-blue-sapphire);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -49,13 +66,13 @@ body {
 #pastTimerContainer {
   margin-top: 0.75rem;
   padding: 0.25rem 3rem 0.25rem 0.25rem;
-  background-color: var(--clr-palette12-ash-blue);
+  background-color: var(--clr-palette15-cedar-chest);
   border-radius: 0 2.75rem 2.75rem 0;
   text-align: start;
 }
 
 #pastTimerContainer > p {
-  color: var(--clr-palette12-light-grey);
+  color: var(--clr-palette15-linen);
   margin: 1rem 1.5rem;
   padding-top: 2.5rem;
 }
@@ -66,9 +83,36 @@ body {
   margin: 1.5rem;
   margin-left: 0.75rem;
   padding: 1.5rem;
-  background-color: var(--clr-palette12-dark-ash-blue);
+  background-image: linear-gradient(
+    var(--clr-palette15-linen) 1%,
+    var(--clr-palette15-light-salmon) 80%,
+    var(--clr-palette15-blue-sapphire) 99%
+  );
   border-radius: 0.5rem;
   overflow-y: scroll;
+}
+
+#activeTimerContainer {
+  padding-top: 2rem;
+  _border: 0.25rem solid var(--clr-palette15-cedar-chest);
+}
+
+#activeTimerContainer > div {
+  margin-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+#activeTimerContainer button {
+  padding: 1rem 1.5rem;
+  font-size: 2rem;
+}
+
+#timer {
+  font-size: 8rem;
+  padding: 2rem 3rem;
+  background-color: var(--clr-palette15-linen);
+  border-radius: 0.75rem;
+  color: var(--clr-palette15-rich-black-29);
 }
 
 /********************************************************************/
@@ -76,20 +120,88 @@ body {
 
 .li-timer-item {
   margin-block: 1rem;
-  border: 0.5rem solid var(--clr-palette12-ash-cyan);
+  border: 0.35rem solid var(--clr-palette15-cedar-chest);
   border-radius: 0.5rem;
 }
 
 .li-timer-item-date-info-element {
   padding-block: 1rem 0.25rem;
-  padding-inline-start: 0.5rem;
-  background-color: var(--clr-palette12-ash-cyan);
+  padding-inline-start: 1rem;
+  background-color: var(--clr-palette15-max-blue-green);
+  color: var(--clr-palette15-linen);
 }
 
 .li-timer-item-info-element {
-  padding: 1rem 0.5rem;
-  background-color: var(--clr-palette12-light-grey);
+  padding: 1rem 0.25rem;
+  background-color: var(--clr-palette12-white);
   border-radius: 0 0 0.25rem 0.25rem;
+  color: var(--clr-palette15-blue-sapphire);
+}
+
+.blur {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  background-color: var(--clr-palette15-rich-black-29);
+  opacity: 0.65;
+  animation: layIn 1.25s ease-in;
+}
+
+.notification {
+  position: absolute;
+  z-index: 3;
+  top: 8rem;
+  bottom: 0;
+  left: 52.25%;
+  right: auto;
+  width: 25ch;
+  margin: 0.5rem;
+  padding: 1rem 2rem;
+  height: fit-content;
+  color: var(--clr-palette15-rich-black-29);
+  background-color: var(--clr-palette15-cedar-chest);
+  border-radius: 1.5rem;
+  animation: popIn 0.25s linear, fadeIn 0.75s linear;
+}
+
+.notification p {
+  margin: 0;
+  padding: 2rem 1rem;
+}
+
+.notification-buttons {
+  margin-bottom: 2rem;
+  margin-inline: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scaleX(0.75);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes layIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.65;
+  }
 }
 
 /********************************************************************/
