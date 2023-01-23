@@ -11,9 +11,9 @@ const timerMarkupElement = document.querySelector("#timer");
 const startBtn = document.querySelector("#btnStartTimer");
 const pauseBtn = document.querySelector("#btnPauseTimer");
 const resetBtn = document.querySelector("#btnResetTimer");
-const main = document.querySelector("main");
 const pastTimerContainer = document.querySelector("#pastTimerContainer");
 const pastTimerList = document.querySelector("#pastTimerList");
+const activeTimerContainer = document.querySelector("#activeTimerContainer");
 
 let currentInterval;
 
@@ -111,11 +111,11 @@ function saveAction() {
   state.activeTimer = null;
   updateLocalStorage();
   renderActiveTimer();
+  renderPastTimers();
+  removeNotification();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
-  const notification = document.querySelector("#notification");
-  notification.remove();
 }
 
 /**
@@ -126,8 +126,7 @@ function dismissAction() {
   state.activeTimer = null;
   updateLocalStorage();
   renderActiveTimer();
-  const notification = document.querySelector("#notification");
-  notification.remove();
+  removeNotification();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
@@ -138,8 +137,7 @@ function dismissAction() {
  * do not do anything with active timer, only delete notification markup element from dom
  */
 function cancelAction() {
-  const notification = document.querySelector("#notification");
-  notification.remove();
+  removeNotification();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
@@ -180,7 +178,9 @@ function createMarkupForPastTimerList(timerObject) {
   const timerInfo = document.createElement("div");
   timerInfo.classList.add("li-timer-item-info-element");
   const timerDateTxt = document.createTextNode(timerObject.date);
-  const timerTxt = document.createTextNode(formatTimerForMarkup(timerObject));
+  const timerTxt = document.createTextNode(
+    "⏱️" + formatTimerForMarkup(timerObject)
+  );
 
   timerDateInfo.appendChild(timerDateTxt);
   timerInfo.appendChild(timerTxt);
@@ -197,20 +197,29 @@ function createNotificationForUserFeedback() {
   startBtn.disabled = true;
   pauseBtn.disabled = true;
   resetBtn.disabled = true;
-  const notification = document.createElement("aside");
-  notification.classList.add("notification");
-  notification.id = "notification";
+
+  const notificationBlur = document.createElement("div");
+  notificationBlur.id = "notificationBlur";
+  notificationBlur.classList.add("blur");
+
+  const notificationContainer = document.createElement("aside");
+  notificationContainer.classList.add("notification");
+  const notification = document.createElement("p");
+  notificationContainer.id = "notification";
   const msg = document.createTextNode(
     "Do you want to save the timer's progress?"
   );
   notification.appendChild(msg);
   const saveBtn = document.createElement("button");
-  const confirmBtnTxt = document.createTextNode("Save");
-  saveBtn.appendChild(confirmBtnTxt);
+  saveBtn.classList.add("notification-buttons");
+  const saveBtnTxt = document.createTextNode("Save");
+  saveBtn.appendChild(saveBtnTxt);
   const dismissBtn = document.createElement("button");
+  dismissBtn.classList.add("notification-buttons");
   const dismissBtnTxt = document.createTextNode("Dismiss");
   dismissBtn.appendChild(dismissBtnTxt);
   const cancelBtn = document.createElement("button");
+  cancelBtn.classList.add("notification-buttons");
   const cancelBtnTxt = document.createTextNode("Cancel");
   cancelBtn.appendChild(cancelBtnTxt);
 
@@ -218,11 +227,22 @@ function createNotificationForUserFeedback() {
   dismissBtn.addEventListener("click", dismissAction);
   cancelBtn.addEventListener("click", cancelAction);
 
-  notification.appendChild(saveBtn);
-  notification.appendChild(dismissBtn);
-  notification.appendChild(cancelBtn);
+  notificationContainer.appendChild(notification);
+  notificationContainer.appendChild(saveBtn);
+  notificationContainer.appendChild(dismissBtn);
+  notificationContainer.appendChild(cancelBtn);
 
-  main.appendChild(notification);
+  document
+    .querySelector("body")
+    .insertBefore(notificationBlur, document.querySelector("main"));
+  document.querySelector("main").appendChild(notificationContainer);
+}
+
+function removeNotification() {
+  const notification = document.querySelector("#notification");
+  const blur = document.querySelector("#notificationBlur");
+  notification.remove();
+  blur.remove();
 }
 
 /*********************************************************************/
