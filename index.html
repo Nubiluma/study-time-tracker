@@ -15,11 +15,23 @@
           <ul class="pad-left-0 list-style-none" id="pastTimerList"></ul>
         </div>
         <div class="mar-inline-2rem flex-grow-1" id="activeTimerContainer">
-          <span id="timer"></span>
-          <div>
-            <button id="btnStartTimer">Start</button>
-            <button id="btnPauseTimer">Pause</button>
-            <button id="btnResetTimer">Reset</button>
+          <div class="timer-container">
+            <div id="timer"></div>
+            <div>
+              <button id="btnStartTimer">Start</button>
+              <button id="btnPauseTimer">Pause</button>
+              <button id="btnResetTimer">Reset</button>
+            </div>
+            <dialog class="notification">
+              <p>Do you want to save the timer's progress?</p>
+              <button class="notification-buttons" id="save-btn">Save</button>
+              <button class="notification-buttons" id="dismiss-btn">
+                Dismiss
+              </button>
+              <button class="notification-buttons" id="cancel-btn">
+                Cancel
+              </button>
+            </dialog>
           </div>
         </div>
       </section>
