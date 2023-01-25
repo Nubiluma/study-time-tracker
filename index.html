@@ -5,23 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>Studying Time Tracker</title>
   </head>
-  <body>
+  <body class="ft-sz-3rem">
     <main>
-      <div>
-        <div></div>
-        <div>
-          <span id="timerHours">00</span>
-          <span>:</span>
-          <span id="timerMinutes">00</span>
-          <span>:</span>
-          <span id="timerSeconds">00</span>
+      <section class="flex-r-c-c flex-wrap flex-gap-5rem">
+        <div id="pastTimerContainer">
+          <p>Your latest timers...</p>
+          <ul class="pad-left-0 list-style-none" id="pastTimerList"></ul>
         </div>
-      </div>
-      <button id="btnStartTimer">Start</button>
-      <button id="btnPauseTimer" disabled>Pause</button>
-      <button id="btnResetTimer" disabled>Reset</button>
+        <div class="mar-inline-2rem flex-grow-1" id="activeTimerContainer">
+          <div class="timer-container">
+            <div id="timer"></div>
+            <div>
+              <button id="btnStartTimer">Start</button>
+              <button id="btnPauseTimer">Pause</button>
+              <button id="btnResetTimer">Reset</button>
+            </div>
+            <dialog class="notification">
+              <p>Do you want to save the timer's progress?</p>
+              <button class="notification-buttons" id="save-btn">Save</button>
+              <button class="notification-buttons" id="dismiss-btn">
+                Dismiss
+              </button>
+              <button class="notification-buttons" id="cancel-btn">
+                Cancel
+              </button>
+            </dialog>
+          </div>
+        </div>
+      </section>
     </main>
     <script src="script.js"></script>
   </body>
