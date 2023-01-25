@@ -90,7 +90,6 @@ function saveTimer() {
     state.savedTimers.unshift(state.activeTimer);
     updateLocalStorage();
   } else if (!isActiveTimerDateToday()) {
-    createNotificationForUserFeedback();
     state.savedTimers.unshift(state.activeTimer);
     updateLocalStorage();
   } else if (isActiveTimerDateToday()) {

@@ -95,7 +95,22 @@ main {
 
 #activeTimerContainer {
   padding-top: 2rem;
+  position: relative;
   _border: 0.25rem solid var(--clr-palette15-cedar-chest);
+}
+
+.timer-container {
+  position: relative;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog {
+  top: 0px;
+  transform: translateY(-100%);
 }
 
 #activeTimerContainer > div {
@@ -109,8 +124,9 @@ main {
 }
 
 #timer {
-  width: 20vw;
+  width: fit-content;
   font-size: 8rem;
+  margin: 2rem 1rem;
   padding: 2rem 3rem;
   background-color: var(--clr-palette15-linen);
   border-radius: 0.75rem;
