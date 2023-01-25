@@ -14,6 +14,10 @@ const resetBtn = document.querySelector("#btnResetTimer");
 const pastTimerContainer = document.querySelector("#pastTimerContainer");
 const pastTimerList = document.querySelector("#pastTimerList");
 const activeTimerContainer = document.querySelector("#activeTimerContainer");
+const notification = document.querySelector(".notification");
+const saveBtn = document.querySelector("#save-btn");
+const dismissBtn = document.querySelector("#dismiss-btn");
+const cancelBtn = document.querySelector("#cancel-btn");
 
 let currentInterval;
 
@@ -27,6 +31,10 @@ const state = {
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", pauseTimer);
 resetBtn.addEventListener("click", resetTimer);
+
+saveBtn.addEventListener("click", saveAction);
+dismissBtn.addEventListener("click", dismissAction);
+cancelBtn.addEventListener("click", cancelAction);
 
 getDataFromLocalStorage();
 renderActiveTimer();
@@ -44,7 +52,7 @@ function startTimer() {
   if (state.activeTimer == null) {
     state.activeTimer = new Timer(0, 0, 0, formatDate(new Date()));
   } else if (!isActiveTimerDateToday()) {
-    createNotificationForUserFeedback();
+    showNotificationForUserFeedback();
     return;
   }
   currentInterval = setInterval(() => {
@@ -77,7 +85,7 @@ function pauseTimer() {
 function resetTimer() {
   if (state.activeTimer != null) {
     pauseTimer();
-    createNotificationForUserFeedback();
+    showNotificationForUserFeedback();
   }
 }
 
@@ -111,7 +119,7 @@ function saveAction() {
   updateLocalStorage();
   renderActiveTimer();
   renderPastTimers();
-  removeNotification();
+  removeNotificationOverlay();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
@@ -125,7 +133,7 @@ function dismissAction() {
   state.activeTimer = null;
   updateLocalStorage();
   renderActiveTimer();
-  removeNotification();
+  removeNotificationOverlay();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
@@ -136,7 +144,7 @@ function dismissAction() {
  * do not do anything with active timer, only delete notification markup element from dom
  */
 function cancelAction() {
-  removeNotification();
+  removeNotificationOverlay();
   startBtn.disabled = false;
   pauseBtn.disabled = false;
   resetBtn.disabled = false;
@@ -161,6 +169,9 @@ function renderActiveTimer() {
   }
 }
 
+/**
+ * render latest timers of savedTimers array in list
+ */
 function renderPastTimers() {
   pastTimerList.innerHTML = "";
 
@@ -169,6 +180,10 @@ function renderPastTimers() {
   }
 }
 
+/**
+ * render latest timers of savedTimers array as list item elements
+ * @param {*} timerObject element of savedTimers array
+ */
 function createMarkupForPastTimerList(timerObject) {
   const timerListItem = document.createElement("li");
   timerListItem.classList.add("li-timer-item");
@@ -189,10 +204,12 @@ function createMarkupForPastTimerList(timerObject) {
 }
 
 /**
- * create markup for user to decide what to do with active timer
+ * show dialog for user to decide what to do with active timer
+ * disable timer buttons while open
  * let user choose to save, dismiss or cancel decision
  */
-function createNotificationForUserFeedback() {
+function showNotificationForUserFeedback() {
+  notification.open = true;
   startBtn.disabled = true;
   pauseBtn.disabled = true;
   resetBtn.disabled = true;
@@ -200,47 +217,17 @@ function createNotificationForUserFeedback() {
   const notificationBlur = document.createElement("div");
   notificationBlur.id = "notificationBlur";
   notificationBlur.classList.add("blur");
-
-  const notificationContainer = document.createElement("aside");
-  notificationContainer.classList.add("notification");
-  const notification = document.createElement("p");
-  notificationContainer.id = "notification";
-  const msg = document.createTextNode(
-    "Do you want to save the timer's progress?"
-  );
-  notification.appendChild(msg);
-  const saveBtn = document.createElement("button");
-  saveBtn.classList.add("notification-buttons");
-  const saveBtnTxt = document.createTextNode("Save");
-  saveBtn.appendChild(saveBtnTxt);
-  const dismissBtn = document.createElement("button");
-  dismissBtn.classList.add("notification-buttons");
-  const dismissBtnTxt = document.createTextNode("Dismiss");
-  dismissBtn.appendChild(dismissBtnTxt);
-  const cancelBtn = document.createElement("button");
-  cancelBtn.classList.add("notification-buttons");
-  const cancelBtnTxt = document.createTextNode("Cancel");
-  cancelBtn.appendChild(cancelBtnTxt);
-
-  saveBtn.addEventListener("click", saveAction);
-  dismissBtn.addEventListener("click", dismissAction);
-  cancelBtn.addEventListener("click", cancelAction);
-
-  notificationContainer.appendChild(notification);
-  notificationContainer.appendChild(saveBtn);
-  notificationContainer.appendChild(dismissBtn);
-  notificationContainer.appendChild(cancelBtn);
-
   document
     .querySelector("body")
     .insertBefore(notificationBlur, document.querySelector("main"));
-  document.querySelector("main").appendChild(notificationContainer);
 }
 
-function removeNotification() {
-  const notification = document.querySelector("#notification");
+/**
+ * close dialog element and remove blur/darkening effect of background
+ */
+function removeNotificationOverlay() {
+  notification.open = false;
   const blur = document.querySelector("#notificationBlur");
-  notification.remove();
   blur.remove();
 }
 

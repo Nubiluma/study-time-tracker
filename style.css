@@ -169,9 +169,9 @@ main {
 .notification {
   position: absolute;
   z-index: 3;
-  top: 8rem;
-  bottom: 0;
-  left: 52.25%;
+  top: auto;
+  bottom: auto;
+  left: auto;
   right: auto;
   width: 25ch;
   margin: 0.5rem;
