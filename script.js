@@ -1,9 +1,10 @@
 class Timer {
-  constructor(seconds, minutes, hours, date) {
+  constructor(seconds, minutes, hours, date, startingTime) {
     this.seconds = seconds;
     this.minutes = minutes;
     this.hours = hours;
     this.date = date;
+    this.startingTime = startingTime;
   }
 }
 
@@ -50,7 +51,13 @@ renderPastTimers();
  */
 function startTimer() {
   if (state.activeTimer == null) {
-    state.activeTimer = new Timer(0, 0, 0, formatDate(new Date()));
+    state.activeTimer = new Timer(
+      0,
+      0,
+      0,
+      formatDate(new Date()),
+      generateStartingTimeforTimer()
+    );
   } else if (!isActiveTimerDateToday()) {
     showNotificationForUserFeedback();
     return;
@@ -246,14 +253,14 @@ function isActiveTimerDateToday() {
 
 /**
  * account seconds, minutes and hours of two timer objects
- * @param {*} activeTimer active timer
- * @param {*} savedTimer saved timer from array
+ * @param {*} timer1 active timer
+ * @param {*} timer2 saved timer from array
  * @returns accounted sum of activeTimer and savedTimer as savedTimer
  */
-function accountTimers(activeTimer, savedTimer) {
-  let sumSeconds = savedTimer.seconds + activeTimer.seconds;
-  let sumMinutes = savedTimer.minutes + activeTimer.minutes;
-  let sumHours = savedTimer.hours + activeTimer.hours;
+function accountTimers(timer1, timer2) {
+  let sumSeconds = timer2.seconds + timer1.seconds;
+  let sumMinutes = timer2.minutes + timer1.minutes;
+  let sumHours = timer2.hours + timer1.hours;
 
   if (sumSeconds < 120 && sumMinutes < 120 && sumHours < 24) {
     if (sumSeconds >= 60) {
@@ -264,12 +271,12 @@ function accountTimers(activeTimer, savedTimer) {
       sumMinutes -= 60;
       sumHours++;
     }
-    savedTimer.seconds = sumSeconds;
-    savedTimer.minutes = sumMinutes;
-    savedTimer.hours = sumHours;
+    timer2.seconds = sumSeconds;
+    timer2.minutes = sumMinutes;
+    timer2.hours = sumHours;
 
-    console.log(savedTimer);
-    return savedTimer;
+    console.log(timer2);
+    return timer2;
   } else {
     console.error(
       "timer(s) invalid: seconds, minutes or hours exceed limit of 60 and/or 24!"
@@ -327,6 +334,14 @@ function formatDate(date) {
   const year = date.getFullYear();
 
   return month + "|" + day + "|" + year;
+}
+
+function generateStartingTimeforTimer() {
+  const seconds = new Date().getSeconds();
+  const minutes = new Date().getMinutes();
+  const hours = new Date().getHours();
+  const startingTime = { seconds, minutes, hours };
+  return startingTime;
 }
 
 /**
